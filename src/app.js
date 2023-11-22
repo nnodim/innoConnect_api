@@ -67,7 +67,7 @@ app.use(errorConverter);
 app.use(errorHandler);
 
 // intit DB
-db.sequelize.sync({ alter: true }).catch((err) => {
+db.sequelize.sync().catch((err) => {
   console.log(err);
 });
 

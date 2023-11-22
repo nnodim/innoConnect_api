@@ -113,4 +113,5 @@ module.exports = {
   updateUserById,
   deleteUserById,
   isPasswordMatch,
+  isEmailTaken,
 };

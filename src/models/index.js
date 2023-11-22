@@ -36,6 +36,11 @@ db.jobApplications = require('./jobApplications.model')(sequelizeInstance, Seque
 db.todos = require('./todo.model')(sequelizeInstance, Sequelize);
 db.mentorships = require('./mentorship.model')(sequelizeInstance, Sequelize);
 db.plans = require('./plan.model')(sequelizeInstance, Sequelize);
+db.subscriptions = require('./subscription.model')(sequelizeInstance, Sequelize);
+db.appReviews = require('./appReviews.model')(sequelizeInstance, Sequelize);
+db.courses = require('./courses.model')(sequelizeInstance, Sequelize);
+db.courseEnrollment = require('./courseEnrollment.model')(sequelizeInstance, Sequelize);
+db.courseCategories = require('./courseCategories.model')(sequelizeInstance, Sequelize);
 
 // db.teachers = require('./teacher.model')(sequelizeInstance, Sequelize);
 // db.subjects = require('./subject.model')(sequelizeInstance, Sequelize);
@@ -58,8 +63,17 @@ db.mentees.belongsTo(db.users);
 db.users.hasMany(db.employers);
 db.employers.belongsTo(db.users);
 
+db.mentors.hasMany(db.courses);
+db.courses.belongsTo(db.mentors);
+
+db.mentees.belongsToMany(db.courses, { through: db.courseEnrollment });
+db.courses.belongsToMany(db.mentees, { through: db.courseEnrollment });
+
 db.employers.hasMany(db.jobs);
 db.jobs.belongsTo(db.employers);
+
+db.users.hasMany(db.appReviews);
+db.appReviews.belongsTo(db.users);
 
 db.users.belongsToMany(db.jobs, { through: 'bookmarks' });
 db.jobs.belongsToMany(db.users, { through: 'bookmarks' });
@@ -69,6 +83,12 @@ db.jobs.belongsToMany(db.users, { through: db.jobApplications });
 
 db.mentors.belongsToMany(db.mentees, { through: db.mentorships });
 db.mentees.belongsToMany(db.mentors, { through: db.mentorships });
+
+db.users.belongsToMany(db.plans, { through: db.subscriptions });
+db.plans.belongsToMany(db.users, { through: db.subscriptions });
+
+db.courseCategories.hasMany(db.courses);
+db.courses.belongsTo(db.courseCategories);
 
 db.users.hasMany(db.todos);
 db.todos.belongsTo(db.users);
